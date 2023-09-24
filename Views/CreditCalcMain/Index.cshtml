@@ -1,0 +1,62 @@
+﻿@model CredicCalc.Models.CreditCalcMainParam
+@{
+  
+    ViewData["Title"] = "Основной";
+
+}
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+
+    <h1 class="display-4">Аннуитетный калькулятор</h1>
+    
+    @using (Html.BeginForm("Results", "CreditCalcMain", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+
+    <div class="row">
+        <div class="col">
+            @Html.LabelFor(m=>m.LoanSum, "Сумма займа", new { @class = "form-label"})
+
+            @Html.TextBoxFor(m => m.LoanSum, new { @class = "form-control",  type = "number"})
+        </div>
+        <div class="col">
+            <br>
+            @Html.ValidationMessageFor(m => m.LoanSum)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            @Html.LabelFor(m=>m.LoanTermMonth, "Срок займа (в месяцах)", new { @class = "form-label"})
+            @Html.TextBoxFor(m => m.LoanTermMonth, new { @class = "form-control",  type = "number" })
+
+        </div>
+        <div class="col">
+            <br>
+            @Html.ValidationMessageFor(m => m.LoanTermMonth)
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col">
+            @Html.LabelFor(m=>m.LoanRateYear, "Ставка (в год)", new { @class = "form-label"})
+            @Html.TextBoxFor(m => m.LoanRateYear, new { @class = "form-control", type = "number" , step="0.01"})
+
+        </div>
+        <div class="col">
+            <br>
+            @Html.ValidationMessageFor(m => m.LoanRateYear)
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col">
+            <button type="submit" class="btn btn-primary">Рассчитать</button>
+    </div>
+       </div>
+    }
+
+

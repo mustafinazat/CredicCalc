@@ -1,0 +1,76 @@
+﻿@model List<CreditCalcItem>
+@{
+    ViewData["Title"] = "Основной";
+}
+
+<div class="text-center">
+    <h1 class="display-4"> Результаты расчета</h1>
+     <table class="table">
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Сумма займа</th>
+                <th>Ставка</th>
+                <th>Срок</th>
+                <th></th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@DateTime.Now.ToString("dd.MM.yyyy")</td></td>
+                <td>@ViewBag.Param.LoanSum</td>
+                <td>@ViewBag.Param.LoanRateYear</td>
+                <td>@ViewBag.Param.LoanTermMonth</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+        <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>№</th>
+            <th>Дата</th>
+            <th>Сумма платежа</th>
+            <th>Основной долг</th>
+            <th>Проценты</th>
+            <th>Остаток</th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach (CreditCalcItem item in Model)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.DateStr</td>
+            <td>@item.PaymentSumStr</td>
+            <td>@item.MainDebtStr</td>
+            <td>@item.PercentStr</td>
+           <td>@item.RemainingDebtStr</td>
+        </tr>
+    }
+            </tbody>
+         </table>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Ежемесячный платеж</th>
+                <th>Переплата по процентам</th>
+                <th>Дата последнего платежа</th>
+                <th>Общая стоимость кредита</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@ViewBag.Payment</td>
+                <td>@ViewBag.Overpayment</td>
+                <td>@ViewBag.lastDate</td>
+                <td>@ViewBag.FullSum</td>
+            </tr>
+        </tbody>
+    </table>
+        
+</div>
+
+

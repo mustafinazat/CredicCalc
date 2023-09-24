@@ -1,0 +1,147 @@
+﻿@model CredicCalc.Models.CreditCalcAdditionalParam
+@{
+
+    ViewData["Title"] = "Дополнительный";
+
+}
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+
+<h1 class="display-4">Аннуитетный калькулятор (дополнительный)</h1>
+
+@using (Html.BeginForm("Results", "CreditCalcAdditional", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+
+    <div class="row">
+        <div class="col">
+            <label class="form-label">Сумма займа</label>
+           
+            <br>
+            @Html.TextBoxFor(m => m.LoanSum, new { @class = "form-control", type = "number", oninput="changeValue(this)"})
+            @Html.TextBoxFor(m => m.LoanSum, new {@class = "form-range",  type = "range" , min="5000", max="30000000", oninput="changeValue(this)"})
+        </div>
+        <div class="col">
+            <br>
+            @Html.ValidationMessageFor(m => m.LoanSum)
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col">
+
+
+            <label class="form-label">Ставка (в день)</label>
+            <br>
+            @Html.TextBoxFor(m => m.LoanRateDay, new { @class = "form-control", type = "number", oninput="changeValue(this)"})
+            @Html.TextBoxFor(m => m.LoanRateDay, new { @class = "form-range",  type = "range" , min="0.01", max="200", step="0.01",  oninput="changeValue(this)" })
+
+
+        </div>
+        <div class="col">
+            <br>
+            @Html.ValidationMessageFor(m => m.LoanRateDay)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+
+
+            <label class="form-label">Шаг платежа (в днях)</label>
+            <br>
+            @Html.TextBoxFor(m => m.StepDay, new { @class = "form-control", type = "number", oninput="changeValue(this)"})
+            @Html.TextBoxFor(m => m.StepDay, new { @class = "form-range",  type = "range" , min="1", max="300",  oninput="changeValue(this)" })
+
+
+        </div>
+        <div class="col">
+            <br>
+            @Html.ValidationMessageFor(m => m.StepDay)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <label class="form-label">Срок займа (в днях)</label>
+            <br>
+            @Html.TextBoxFor(m => m.LoanTermDay, new { @class = "form-control", type = "number", oninput="changeValue(this)"})
+            @Html.TextBoxFor(m => m.LoanTermDay, new { @class = "form-range",  type = "range" , min="1", max="200000", oninput="changeValue(this)" })
+
+
+        </div>
+        <div class="col">
+            <br>
+            @Html.ValidationMessageFor(m => m.LoanTermDay)
+            <div id="LoanTermValidation"></div>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col">
+            <button type="submit" class="btn btn-primary">Рассчитать</button>
+        </div>
+    </div>
+}
+<script>
+
+    document.addEventListener("DOMContentLoaded", ready);
+    function ready() {
+       
+
+        $('span[data-valmsg-for="LoanTermDay"]').on("DOMSubtreeModified", function () {
+            let stepday = $('input[name="StepDay"]').val();
+            let loanTermDay = $('input[name="LoanTermDay"]').val();
+           
+            if ((loanTermDay % stepday) !==0 && $('span[data-valmsg-for="LoanTermDay"]').hasClass("field-validation-error") ) {
+
+             
+                let periodsnumDown = Math.floor(loanTermDay / stepday)
+                let periodsnumUp = Math.ceil(loanTermDay / stepday)
+
+            
+                
+                if (periodsnumDown == 0)
+                {
+                    $('#LoanTermValidation').html("Изменить на " + createButton(stepday * periodsnumUp));
+                }
+                else
+                {
+                    $('#LoanTermValidation').html("Изменить на " + createButton(stepday * periodsnumDown) + ' или ' + createButton(stepday * periodsnumUp));
+                }
+                
+
+         }
+         else
+         {
+        $('#LoanTermValidation').html("");
+         }
+        });
+
+    }
+    function createButton(value)
+    {
+        return " <span class='btn btn-success' onclick='setLoanTermValue(" + value + ")'> " + value + "</span>";
+    }
+
+    function setLoanTermValue(value)
+    {
+        $('input[name="LoanTermDay"]').each(function (i, obj) {
+            // alert(obj.id);
+            obj.value = value;
+        });
+    }
+   
+    function changeValue(el) {
+
+        $('input[name="' + el.id + '"]').each(function (i, obj) {
+            // alert(obj.id);
+            obj.value = el.value;
+        });
+    }
+</script>
+
